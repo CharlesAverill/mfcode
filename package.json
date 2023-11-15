@@ -1,0 +1,25 @@
+{
+  "name": "mfcode",
+  "displayName": "mfcode",
+  "description": "Language support for METAFONT",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "metafont",
+      "aliases": ["METAFONT", "metafont"],
+      "extensions": [".mf"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "metafont",
+      "scopeName": "source.mf",
+      "path": "./syntaxes/metafont.tmLanguage.json"
+    }]
+  }
+}

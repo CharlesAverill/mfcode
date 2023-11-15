@@ -1,0 +1,71 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "METAFONT",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#numbers"
+		},
+		{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.percentage.metafont",
+					"match": "%.*$"
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.metafont",
+					"match": "\\b(if|else|elseif|fi|for|endfor|def|enddef|mode_setup|define_pixels|define_blacker_pixels|define_corrected_pixels|beginchar|endchar|curve_sidebar|penpos|penstroke|penlabels|expr|down|right|up|left)\\b"
+				},
+				{
+					"name": "keyword.operator.assignment.metafont",
+					"match": ":="
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "variable.other.metafont",
+					"match": "\\b((x|y|z)\\d+(l|r)?|w|h|em|cap|thin|thick|o|pt)\\b"
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric.metafont",
+					"match": "\\b\\d+(\\.\\d+)?\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.metafont",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.metafont",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "source.mf"
+}
