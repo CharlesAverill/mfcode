@@ -6,13 +6,13 @@
 - Syntax highlighting
 - Commands to compile and preview fonts
 
-![command palette](media/palette.png)
+![command palette](https://raw.githubusercontent.com/CharlesAverill/mfcode/main/media/palette.png)
 
 ## Warning
 
 This thing is pretty janky, be warned. These settings should help:
 
-![settings](media/settings.png)
+![settings](https://raw.githubusercontent.com/CharlesAverill/mfcode/main/media/settings.png)
 
 ## Dependencies
 

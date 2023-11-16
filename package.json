@@ -2,6 +2,8 @@
   "name": "mfcode",
   "displayName": "mfcode",
   "description": "Language support for METAFONT",
+  "homepage": "https://github.com/CharlesAverill/mfcode",
+  "repository": {"type": "git", "url": "https://github.com/CharlesAverill/mfcode.git"},
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.83.0"
