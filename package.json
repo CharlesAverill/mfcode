@@ -35,6 +35,32 @@
         "command": "mfcode.compileAndPreview",
         "title": "Compile and Preview METAFONT"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "mfcode",
+      "properties": {
+        "mfcode.mfCmd": {
+          "type": "string",
+          "default": "mf",
+          "description": "Path to METAFONT compiler"
+        },
+        "mfcode.mfOptions": {
+          "type": "string",
+          "default": "",
+          "description": "Arguments to pass into the METAFONT compiler"
+        },
+        "mfcode.delay": {
+          "type": "integer",
+          "default": 1000,
+          "description": "Time in milliseconds to wait between generating preview and opening preview window"
+        },
+        "mfcode.showTerminals": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show the commands being executed during compilation and preview generation"
+        }
+      }
+    }
   }
 }

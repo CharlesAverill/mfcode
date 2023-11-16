@@ -2,6 +2,7 @@ const vscode = require('vscode');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const { config } = require('process');
 
 const terminalName = "mfcode";
 
@@ -9,48 +10,58 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+let previewPanel;
+
 async function preview() {
     const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            vscode.window.showErrorMessage('No active text editor');
-            return;
-        }
+    if (!editor) {
+        vscode.window.showErrorMessage('No active text editor');
+        return;
+    }
 
-        var terminal = vscode.window.terminals.find((terminal) => terminal.name === terminalName);
-        if (!terminal) {
-            terminal = vscode.window.createTerminal(terminalName);
-        }
+    var terminal = vscode.window.terminals.find((terminal) => terminal.name === terminalName);
+    if (!terminal) {
+        terminal = vscode.window.createTerminal(terminalName);
+    }
 
-        terminal.sendText(`cd "${path.dirname(editor.document.fileName)}"`);
-        var baseName = path.basename(editor.document.fileName, path.extname(editor.document.fileName));
-        terminal.sendText(`gftodvi "${baseName}"*gf`)
-        terminal.sendText(`dvipdf "${baseName}".dvi`);
-        terminal.sendText(`pdftoppm "${baseName}".pdf ".${baseName}" -png`);
-        terminal.sendText(`rm "${baseName}".pdf`);
-        terminal.sendText(`for file in ."${baseName}"*.png; do convert "$file" -trim "$file"; done`);
+    const configuration = vscode.workspace.getConfiguration('mfcode');
+
+    terminal.sendText(`cd "${path.dirname(editor.document.fileName)}"`);
+    var baseName = path.basename(editor.document.fileName, path.extname(editor.document.fileName));
+    terminal.sendText(`gftodvi "${baseName}"*gf`)
+    terminal.sendText(`dvipdf "${baseName}".dvi`);
+    terminal.sendText(`pdftoppm "${baseName}".pdf "${baseName}" -png`);
+    terminal.sendText(`rm "${baseName}".pdf`);
+    terminal.sendText(`for file in "${baseName}"*.png; do convert "$file" -trim "$file"; done`);
+    if (configuration.get('showTerminals', false)) {
         terminal.show();
+    }
 
-        await delay(3000);
+    await delay(configuration.get('delay', 1000));
 
-        const panel = vscode.window.createWebviewPanel(
-          'metafontPreview',
-          'METAFONT Preview',
-          vscode.ViewColumn.Two,
-          {}
+    if (!previewPanel) {
+        previewPanel = vscode.window.createWebviewPanel(
+            'metafontPreview',
+            'METAFONT Preview',
+            vscode.ViewColumn.Two,
+            {}
         );
+    } else {
+        previewPanel.reveal(vscode.ViewColumn.Two);
+    }
 
-        // Find all matching PNG files
-        const matchingFiles = fs.readdirSync(path.dirname(editor.document.fileName))
-            .filter(file => file.startsWith(`.${baseName}-`) && file.endsWith('.png'));
+    // Find all matching PNG files
+    const matchingFiles = fs.readdirSync(path.dirname(editor.document.fileName))
+        .filter(file => file.startsWith(`${baseName}-`) && file.endsWith('.png'));
 
-        // Read and convert each matching file to base64
-        const base64Images = matchingFiles.map(file => {
-            const filePath = path.join(path.dirname(editor.document.fileName), file);
-            return fs.readFileSync(filePath, 'base64');
-        });
+    // Read and convert each matching file to base64
+    const base64Images = matchingFiles.map(file => {
+        const filePath = path.join(path.dirname(editor.document.fileName), file);
+        return fs.readFileSync(filePath, 'base64');
+    });
 
-        panel.webview.html = getWebviewContent(base64Images);
-        console.log(getWebviewContent(base64Images));
+    previewPanel.webview.html = getWebviewContent(base64Images);
+    console.log(getWebviewContent(base64Images));
 }
 
 async function compileAndPreview() {
@@ -60,6 +71,8 @@ async function compileAndPreview() {
 
 function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('mfcode.compile', () => {
+        const configuration = vscode.workspace.getConfiguration('mfcode');
+
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage('No active text editor');
@@ -72,9 +85,11 @@ function activate(context) {
         }
 
         terminal.sendText(`cd "${path.dirname(editor.document.fileName)}"`);
-        terminal.sendText(`mf --halt-on-error ${editor.document.fileName}`);
+        terminal.sendText(`${configuration.get('mfCmd', 'mf')} ${configuration.get('mfOptions', '')} ${editor.document.fileName}`);
         terminal.sendText('end.');
-        // terminal.show();
+        if (configuration.get('showTerminals', false)) {
+            terminal.show();
+        }
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('mfcode.preview', () => {

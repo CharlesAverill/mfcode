@@ -4,13 +4,19 @@
 
 ## Features
 - Syntax highlighting
-- Command to compile and preview fonts
+- Commands to compile and preview fonts
+
+![command palette](media/palette.png)
 
 ## Warning
 
-This thing is crazy janky, be warned
+This thing is pretty janky, be warned. These settings should help:
+
+![settings](media/settings.png)
 
 ## Dependencies
+
+Expects a Linux machine
 
 - `mf`
 - `gftodvi`
