@@ -4,11 +4,12 @@
   "description": "Language support for METAFONT",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.84.0"
+    "vscode": "^1.83.0"
   },
   "categories": [
     "Programming Languages"
   ],
+  "main": "extension.js",
   "contributes": {
     "languages": [{
       "id": "metafont",
@@ -20,6 +21,20 @@
       "language": "metafont",
       "scopeName": "source.mf",
       "path": "./syntaxes/metafont.tmLanguage.json"
-    }]
+    }],
+    "commands": [
+      {
+        "command": "mfcode.compile",
+        "title": "Compile METAFONT"
+      },
+      {
+        "command": "mfcode.preview",
+        "title": "Open METAFONT Preview to the Side"
+      },
+      {
+        "command": "mfcode.compileAndPreview",
+        "title": "Compile and Preview METAFONT"
+      }
+    ]
   }
 }
