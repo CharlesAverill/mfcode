@@ -15,7 +15,11 @@
       "id": "metafont",
       "aliases": ["METAFONT", "metafont"],
       "extensions": [".mf"],
-      "configuration": "./language-configuration.json"
+      "configuration": "./language-configuration.json",
+      "icon": {
+        "light": "./media/logo_light.png",
+        "dark": "./media/logo_dark.png"
+      }
     }],
     "grammars": [{
       "language": "metafont",
