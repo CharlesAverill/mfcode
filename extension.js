@@ -12,7 +12,7 @@ function delay(ms) {
 
 let previewPanel;
 
-async function preview() {
+async function preview(context) {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
         vscode.window.showErrorMessage('No active text editor');
@@ -46,6 +46,14 @@ async function preview() {
             vscode.ViewColumn.Two,
             {}
         );
+
+        previewPanel.onDidDispose(
+            () => {
+                previewPanel = null;
+            },
+            null,
+            context.subscriptions
+        )
     } else {
         previewPanel.reveal(vscode.ViewColumn.Two);
     }
@@ -61,7 +69,6 @@ async function preview() {
     });
 
     previewPanel.webview.html = getWebviewContent(base64Images);
-    console.log(getWebviewContent(base64Images));
 }
 
 async function compileAndPreview() {
@@ -86,8 +93,13 @@ function activate(context) {
 
         terminal.sendText(`cd "${path.dirname(editor.document.fileName)}"`);
         terminal.sendText(`${configuration.get('mfCmd', 'mf')} ${configuration.get('mfOptions', '')} ${editor.document.fileName}`);
-        terminal.sendText('end.');
-        if (configuration.get('showTerminals', false)) {
+        // if (configuration.get('modeSetup', '').length > 0) {
+        //     terminal.sendText(`${configuration.get('modeSetup', '')}; input `);
+        // }
+        // terminal.sendText(editor.document.fileName);
+        if (configuration.get('endOnFinish', false)) {
+            terminal.sendText('end.');
+        } else if (configuration.get('showTerminals', false)) {
             terminal.show();
         }
     }));

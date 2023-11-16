@@ -4,7 +4,8 @@
   "description": "Language support for METAFONT",
   "homepage": "https://github.com/CharlesAverill/mfcode",
   "repository": {"type": "git", "url": "https://github.com/CharlesAverill/mfcode.git"},
-  "version": "0.0.1",
+  "publisher": "caverill",
+  "version": "0.3.0",
   "engines": {
     "vscode": "^1.83.0"
   },
@@ -55,6 +56,16 @@
           "type": "string",
           "default": "",
           "description": "Arguments to pass into the METAFONT compiler"
+        },
+        "mfcode.modeSetup": {
+          "type": "string",
+          "default": "",
+          "description": "Setup METAFONT code executed in the compiler before loading the input file"
+        },
+        "mfcode.endOnFinish": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically insert `end.` into the compiler stream after finishing compilation"
         },
         "mfcode.delay": {
           "type": "integer",
